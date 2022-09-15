@@ -1,0 +1,24 @@
+name: 'Dependency Check'
+on: [pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  vulnerable-dependency-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout Repository'
+        uses: actions/checkout@v3
+      - name: 'Dependency Review'
+        uses: actions/dependency-review-action@v2
+        with:
+          # Possible values: "critical", "high", "moderate", "low"
+          # Fails on set value and more severe
+          fail-on-severity: high
+          #
+          # Possible values: Any `spdx_id` value(s) from https://docs.github.com/en/rest/licenses
+          # allow-licenses: GPL-3.0, BSD-3-Clause, MIT
+          #
+          # Possible values: Any `spdx_id` value(s) from https://docs.github.com/en/rest/licenses
+          deny-licenses: LGPL-1.0+, BSD-2-Clause, Apache-1.0+ 
