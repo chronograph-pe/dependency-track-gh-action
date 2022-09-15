@@ -1,13 +1,18 @@
-name: "Python Container Action Template"
-description: "Get started with Python Container actions"
-author: "Jacob Tomlinson"
+name: "Dependency Track Github Action"
+description: "Handles all dependency track API requests"
+author: "Rob Sitro"
 inputs:
-  myInput:
-    description: "Input to use"
-    default: "world"
+  url:
+    description: "DT URL"
+  api_key:
+    description: "DT API key"
+  project_uuid:
+    description: "Project UUID to process"
 outputs:
-  myOutput:
+  results:
     description: "Output from the action"
+  status:
+    description: "Determines if the action failed"
 runs:
   using: "docker"
   image: "Dockerfile"
