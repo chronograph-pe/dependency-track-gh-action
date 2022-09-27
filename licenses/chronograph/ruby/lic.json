@@ -1,0 +1,154 @@
+{
+    "spring": [
+        "MIT"
+    ],
+    "groups": "unknown",
+    "rails": [
+        "MIT"
+    ],
+    "pg": [
+        "BSD-2-Clause"
+    ],
+    "uglifier": [
+        "MIT"
+    ],
+    "jbuilder": [
+        "MIT"
+    ],
+    "rack-cors": [
+        "MIT"
+    ],
+    "puma": [
+        "BSD-3-Clause"
+    ],
+    "activerecord-import": [
+        "MIT"
+    ],
+    "active_median": [
+        "MIT"
+    ],
+    "groupdate": [
+        "MIT"
+    ],
+    "apartment": [
+        "MIT"
+    ],
+    "apartment-sidekiq": [
+        "MIT"
+    ],
+    "pluck_to_hash": [
+        "MIT"
+    ],
+    "paper_trail": [
+        "MIT"
+    ],
+    "pg_search": [
+        "MIT"
+    ],
+    "graphql": [
+        "MIT"
+    ],
+    "graphql-batch": [
+        "MIT"
+    ],
+    "aws-sdk": [
+        "Apache-2.0"
+    ],
+    "dnsimple": "unknown",
+    "rubyzip": [
+        "BSD 2-Clause"
+    ],
+    "caxlsx": [
+        "MIT"
+    ],
+    "roo": [
+        "MIT"
+    ],
+    "hashids": [
+        "MIT"
+    ],
+    "redis": [
+        "MIT"
+    ],
+    "sidekiq": [
+        "LGPL-3.0"
+    ],
+    "sidekiq-limit_fetch": [
+        "MIT"
+    ],
+    "sidekiq-status": [
+        "MIT"
+    ],
+    "whenever": [
+        "MIT"
+    ],
+    "knock": [
+        "MIT"
+    ],
+    "jwt": [
+        "MIT"
+    ],
+    "rest-client": [
+        "MIT"
+    ],
+    "bcrypt": [
+        "MIT"
+    ],
+    "rotp": [
+        "MIT"
+    ],
+    "request_store": [
+        "MIT"
+    ],
+    "request_store-sidekiq": [
+        "MIT"
+    ],
+    "oj": [
+        "MIT"
+    ],
+    "awesome_print": [
+        "MIT"
+    ],
+    "lograge": [
+        "MIT"
+    ],
+    "sentry-raven": [
+        "Apache-2.0"
+    ],
+    "money": [
+        "MIT"
+    ],
+    "money-historical-bank": [
+        "MIT"
+    ],
+    "sendgrid-ruby": [
+        "MIT"
+    ],
+    "clearbit": [
+        "MIT"
+    ],
+    "nokogiri": [
+        "MIT"
+    ],
+    "mini_magick": [
+        "MIT"
+    ],
+    "pry-rails": [
+        "MIT"
+    ],
+    "pry-byebug": [
+        "MIT"
+    ],
+    "rails-erd": [
+        "MIT"
+    ],
+    "rspec-rails": [
+        "MIT"
+    ],
+    "colorize": [
+        "GPL-2.0"
+    ],
+    "yaml_db": [
+        "MIT"
+    ]
+}
