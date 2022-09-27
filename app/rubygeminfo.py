@@ -5,7 +5,7 @@ from pathlib import Path
 
 
 
-def licenses(gemfile, repository):
+def licenses(gemfile, repository, license_files_path):
     n = GemfileParser(gemfile, repository)
     dependency_dictionary = n.parse()
     licenses = {}
@@ -16,15 +16,15 @@ def licenses(gemfile, repository):
             gem_names = []
             for gem in dependencies:
                 gem_names.append(gem.name)
-            lics = get_licenses(gem_names, repository)
+            lics = get_licenses(gem_names, license_files_path)
             licenses[env] = lics
     
     return licenses
 
 
-def get_licenses(gem_names, repository):
+def get_licenses(gem_names, license_files_path):
     licenses = []
-    license_file = "{}/licenses/{}/ruby/lic.json".format(repository, repository)
+    license_file = "{}/ruby/lic.json".format(license_files_path)
     
     with open(license_file) as f:
         license_data = json.load(f)

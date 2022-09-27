@@ -3,6 +3,7 @@ import os
 import json
 
 repository = os.environ.get("REPOSITORY")
+license_files_path = os.environ.get("LICENSE_FILES_PATH")
 gemfile = os.environ.get("GEMFILE")
 package_file = os.environ.get("PACKAGE_FILE")
 requirements_file = os.environ.get("REQUIREMENTS_FILE")
@@ -21,7 +22,7 @@ def main():
             print("{} not found".format(gemfile))
             exit(1)
         print("{} found".format(gemfile))
-        lics = rubygeminfo.licenses(gemfile, repository)
+        lics = rubygeminfo.licenses(gemfile, repository, license_files_path)
         dependencies["ruby"] = lics
 
     if package_file:
