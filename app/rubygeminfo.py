@@ -24,7 +24,7 @@ def licenses(gemfile, repository):
 
 def get_licenses(gem_names, repository):
     licenses = []
-    license_file = "licenses/{}/ruby/lic.json".format(repository)
+    license_file = "{}/licenses/{}/ruby/lic.json".format(repository, repository)
     
     with open(license_file) as f:
         license_data = json.load(f)

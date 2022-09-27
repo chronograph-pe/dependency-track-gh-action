@@ -2,8 +2,6 @@ import rubygeminfo
 import os
 import json
 
-gemfile = "/Users/rsitro/dev/chronograph/Gemfile"
-
 repository = os.environ.get("REPOSITORY")
 gemfile = os.environ.get("GEMFILE")
 package_file = os.environ.get("PACKAGE_FILE")
