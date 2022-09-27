@@ -4,6 +4,8 @@ import json
 
 repository = os.environ.get("REPOSITORY")
 license_files_path = os.environ.get("LICENSE_FILES_PATH")
+restricted_licenses_file = os.environ.get("RESTRICTED_LICENSES_FILE")
+dependency_exceptions_file = os.environ.get("DEPENDENCY_EXCEPTION_FILE")
 gemfile = os.environ.get("GEMFILE")
 package_file = os.environ.get("PACKAGE_FILE")
 requirements_file = os.environ.get("REQUIREMENTS_FILE")
@@ -15,6 +17,18 @@ def main():
 
     if not repository:
         print("REPOSITORY env var required".format(repository))
+        exit(1)
+
+    if not license_files_path:
+        print("LICENSE_FILES_PATH env var required".format(license_files_path))
+        exit(1)
+
+    if not restricted_licenses_file:
+        print("RESTRICTED_LICENSES_FILE env var required".format(restricted_licenses_file))
+        exit(1)
+
+    if not dependency_exceptions_file:
+        print("DEPENDENCY_EXCEPTION_FILE env var required".format(dependency_exceptions_file))
         exit(1)
 
     if gemfile:
@@ -45,10 +59,10 @@ def main():
 def check_for_violations(dependencies):
     violations = []
 
-    with open("restricted_licenses.json") as f:
+    with open(restricted_licenses_file) as f:
         restricted_licenses = json.load(f)
 
-    with open("dependency_exceptions.json") as f:
+    with open(dependency_exceptions_file) as f:
         dependency_exceptions = json.load(f)
 
     for lang, deps in dependencies.items():
