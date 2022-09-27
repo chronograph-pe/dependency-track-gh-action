@@ -22,5 +22,6 @@ jobs:
       with:
         bundler-cache: true
     - run: |
+        cd sample-node
         gem install license_finder
         license_finder
