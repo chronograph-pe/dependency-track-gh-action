@@ -62,9 +62,11 @@ def main():
             print("license name: {}".format(violation["license_name"]))
             print("###################################################")
     
-    if config["block_build"]:
-        print("exiting...")
-        exit(1)
+        if config["block_build"]:
+            print("exiting...")
+            exit(1)
+            
+    print("[OK] no license violations found")
 
 if __name__ == "__main__":
     main()
