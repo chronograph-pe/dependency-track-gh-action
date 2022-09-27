@@ -20,6 +20,7 @@ jobs:
           npm_config_tmp=$RUNNER_TEMP npm install
     - uses: ruby/setup-ruby@v1
       with:
+        ruby-version: '2.7'
         bundler-cache: true
     - run: |
         gem install license_finder
