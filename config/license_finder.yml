@@ -1,0 +1,4 @@
+decisions_file: './dependency_decisions.yml'
+enabled_package_managers:
+  - npm
+  - pip
