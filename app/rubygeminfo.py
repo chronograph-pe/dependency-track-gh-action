@@ -4,11 +4,11 @@ import json
 from pathlib import Path
 
 
-
-def licenses(gemfile, repository, license_files_path):
-    n = GemfileParser(gemfile, repository)
-    dependency_dictionary = n.parse()
+def licenses(dependency_file, app_name, license_file):
     licenses = {}
+
+    n = GemfileParser(dependency_file, app_name)
+    dependency_dictionary = n.parse()
 
     for env, dependencies in dependency_dictionary.items():
         print("Finding licenses for gems in {}...".format(env))
@@ -16,21 +16,20 @@ def licenses(gemfile, repository, license_files_path):
             gem_names = []
             for gem in dependencies:
                 gem_names.append(gem.name)
-            lics = get_licenses(gem_names, license_files_path)
+            lics = get_licenses(gem_names, license_file)
             licenses[env] = lics
     
     return licenses
 
 
-def get_licenses(gem_names, license_files_path):
+def get_licenses(gem_names, license_file):
     licenses = []
-    license_file = "{}/ruby/lic.json".format(license_files_path)
     
     with open(license_file) as f:
-        license_data = json.load(f)
-        
+        dependency_data = json.load(f)
+            
     for gem_name in gem_names:
-        license = license_data.get(gem_name)
+        license = dependency_data.get(gem_name)
         if license:
             licenses.append({gem_name: license})
         else:

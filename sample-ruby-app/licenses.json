@@ -1,0 +1,56 @@
+{
+    "web-console": [
+        "MIT"
+    ],
+    "spring": [
+        "MIT"
+    ],
+    "rails": [
+        "MIT"
+    ],
+    "sqlite3": [
+        "BSD-3-Clause"
+    ],
+    "sass-rails": [
+        "MIT"
+    ],
+    "uglifier": [
+        "MIT"
+    ],
+    "coffee-rails": [
+        "MIT"
+    ],
+    "jquery-rails": [
+        "MIT"
+    ],
+    "turbolinks": [
+        "MIT"
+    ],
+    "jbuilder": [
+        "MIT"
+    ],
+    "acts-as-taggable-on": [
+        "MIT"
+    ],
+    "acts_as_follower": [
+        "MIT"
+    ],
+    "devise": [
+        "MIT"
+    ],
+    "jwt": [
+        "MIT"
+    ],
+    "rack-cors": [
+        "MIT"
+    ],
+    "puma": [
+        "BSD-3-Clause"
+    ],
+    "sdoc": [
+        "MIT"
+    ],
+    "byebug": [
+        "BSD-2-Clause"
+    ]
+}
