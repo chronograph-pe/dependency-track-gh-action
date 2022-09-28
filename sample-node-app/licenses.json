@@ -1,0 +1,17 @@
+{
+    "all-contributors-cli": [
+        "MIT"
+    ],
+    "jest": [
+        "MIT"
+    ],
+    "markdownlint-cli": [
+        "MIT"
+    ],
+    "standard": [
+        "MIT"
+    ],
+    "yargs": [
+        "MIT"
+    ]
+}

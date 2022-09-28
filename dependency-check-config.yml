@@ -5,4 +5,10 @@ apps:
       dependency_exceptions_file: sample-ruby-app/dependency_exceptions.json
       language: ruby
       dependency_file: sample-ruby-app/Gemfile
-block_build: True
+  - sample_node_app:
+      license_file: sample-node-app/licenses.json
+      restricted_licenses_file: sample-node-app/restricted_licenses.json
+      dependency_exceptions_file: sample-node-app/dependency_exceptions.json
+      language: node
+      dependency_file: sample-node-app/package.json
+block_build: False

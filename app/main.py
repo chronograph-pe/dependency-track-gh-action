@@ -1,4 +1,5 @@
 import rubygeminfo
+import nodedepinfo
 import os
 import tools
 import yaml
@@ -32,12 +33,14 @@ def main():
             
             if language == "ruby":
                 license_data = rubygeminfo.licenses(dependency_file, app_name, license_file)
+                print(license_data)
 
             if language == "python":
                 pass
             
             if language == "node":
-                pass 
+                license_data = nodedepinfo.licenses(dependency_file, app_name, license_file)
+                print(license_data)
 
             violations = tools.check_for_violations(
                 license_data, restricted_licenses_file, dependency_exceptions_file)
