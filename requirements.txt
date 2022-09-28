@@ -1,3 +1,4 @@
 requests
 gemfileparser2
 pyyaml
+requirements-parser

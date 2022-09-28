@@ -1,23 +1,21 @@
 import requests
 import json
-
+import requirements
 
 def licenses(dependency_file, app_name, license_file):
     dependencies = {}
     
     with open(dependency_file) as f:
-        dependency_dictionary = json.load(f)
-        
-    dev_dependencies = dependency_dictionary.get("devDependencies")
-    prod_dependencies = dependency_dictionary.get("dependencies")
+        dep_names = []
+        for req in requirements.parse(f):
+            dep_names.append(req.name)
 
-    dependencies["development"] = dev_dependencies
-    dependencies["production"] = prod_dependencies
-    
+    dependencies["production"] = dep_names
+        
     licenses = get_licenses(dependencies, license_file)
-        
+    
     return licenses
-
+    
 
 def get_licenses(dependencies, license_file):
     full_deps = {}
@@ -27,32 +25,31 @@ def get_licenses(dependencies, license_file):
         
     for env, deps in dependencies.items():
         licenses = []
-        print("Finding licenses for dependencies in {}...".format(env))
-        for dep_name, dep_version in deps.items():
+        for dep_name in deps:
             license = dependency_data.get(dep_name)
             if license:
                 licenses.append({dep_name: license})
             else:
-                print("{} not found in database. fetching from registry.npmjs.org...".format(dep_name))
+                print("{} not found in database. fetching from pypi.org...".format(dep_name))
                 license = fetch_license(dep_name)
-                licenses.append({dep_name: license})
                 if license:
                     add_dep_to_license_file(dep_name, license, license_file)
-        full_deps[env] = licenses
-                
+                licenses.append({dep_name: license})
+        full_deps[env] = licenses  
+        
     return full_deps
 
 
 def fetch_license(dep_name):
     r = requests.get(
-        'https://registry.npmjs.org/{}'.format(dep_name))
+        'https://pypi.org//pypi/{}/json'.format(dep_name))
     
     if r.status_code != 200:
         print("error retrieving {} license. skipping adding to licenses.json.".format(dep_name))
         return False
     
-    data = r.json()
-
+    data = r.json().get("info")
+    
     if not data.get("license"):
         print("[WARN] No license info found for {}".format(dep_name))
         return ["unknown"]
@@ -66,4 +63,3 @@ def add_dep_to_license_file(dep_name, license, license_file):
         file_data[dep_name] = license
         file.seek(0)
         json.dump(file_data, file, indent = 4)
-

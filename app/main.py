@@ -1,5 +1,6 @@
 import rubygeminfo
 import nodedepinfo
+import pythondepinfo
 import os
 import tools
 import yaml
@@ -23,7 +24,7 @@ def main():
 
     for app in config["apps"]:
         for app_name, app_config in app.items():
-            print("generating license data for {}".format(app_name))
+            print("-- Generating license data for {}".format(app_name))
             
             license_file = app_config["license_file"]
             restricted_licenses_file = app_config["restricted_licenses_file"]
@@ -33,14 +34,12 @@ def main():
             
             if language == "ruby":
                 license_data = rubygeminfo.licenses(dependency_file, app_name, license_file)
-                print(license_data)
 
             if language == "python":
-                pass
+                license_data = pythondepinfo.licenses(dependency_file, app_name, license_file)
             
             if language == "node":
                 license_data = nodedepinfo.licenses(dependency_file, app_name, license_file)
-                print(license_data)
 
             violations = tools.check_for_violations(
                 license_data, restricted_licenses_file, dependency_exceptions_file)
@@ -59,17 +58,17 @@ def main():
         for violation in license_violations:
             print()
             print("################ LICENSE VIOLATION ################")
-            print("app name: {}".format(violation["app_name"]))
-            print("language: {}".format(violation["language"]))
-            print("dependency name: {}".format(violation["dependency_name"]))
-            print("license name: {}".format(violation["license_name"]))
+            print("App name: {}".format(violation["app_name"]))
+            print("Language: {}".format(violation["language"]))
+            print("Dependency name: {}".format(violation["dependency_name"]))
+            print("License name: {}".format(violation["license_name"]))
             print("###################################################")
     
         if config["block_build"]:
             print("exiting...")
             exit(1)
     else:
-         print("[OK] no license violations found")
+         print("[OK] No license violations found")
             
    
 

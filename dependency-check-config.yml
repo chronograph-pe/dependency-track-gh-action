@@ -11,4 +11,10 @@ apps:
       dependency_exceptions_file: sample-node-app/dependency_exceptions.json
       language: node
       dependency_file: sample-node-app/package.json
+  - sample_python_app:
+      license_file: sample-python-app/licenses.json
+      restricted_licenses_file: sample-python-app/restricted_licenses.json
+      dependency_exceptions_file: sample-python-app/dependency_exceptions.json
+      language: python
+      dependency_file: sample-python-app/requirements.txt
 block_build: False

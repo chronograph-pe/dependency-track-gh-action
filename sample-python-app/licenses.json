@@ -1,0 +1,35 @@
+{
+    "Flask": [
+        "BSD-3-Clause"
+    ],
+    "Jinja2": [
+        "BSD-3-Clause"
+    ],
+    "MarkupSafe": [
+        "BSD-3-Clause"
+    ],
+    "Werkzeug": [
+        "BSD-3-Clause"
+    ],
+    "gnureadline": [
+        "unknown"
+    ],
+    "itsdangerous": [
+        "BSD-3-Clause"
+    ],
+    "rauth": [
+        "MIT"
+    ],
+    "requests": [
+        "Apache 2.0"
+    ],
+    "wsgiref": [
+        "PSF or ZPL"
+    ],
+    "gunicorn": [
+        "MIT"
+    ],
+    "Flask-SSLify": [
+        "BSD"
+    ]
+}

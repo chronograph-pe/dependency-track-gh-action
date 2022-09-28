@@ -36,7 +36,8 @@ def get_licenses(gem_names, license_file):
             print("{} not found in database. fetching from rubygems.org...".format(gem_name))
             license = fetch_license(gem_name)
             licenses.append({gem_name: license})
-            add_gem_to_license_file(gem_name, license, license_file)
+            if license:
+                add_gem_to_license_file(gem_name, license, license_file)
             
     return licenses
 
@@ -46,11 +47,13 @@ def fetch_license(gem_name):
         'https://rubygems.org/api/v1/gems/{}.json'.format(gem_name))
     
     if r.status_code != 200:
-        return "error"
+        print("error retrieving {} license. skipping adding to licenses.json.".format(gem_name))
+        return False
     
     data = r.json()
 
     if not data.get("licenses"):
+        print("[WARN] No license info found for {}".format(gem_name))
         return "unknown"
     
     return data.get("licenses")
