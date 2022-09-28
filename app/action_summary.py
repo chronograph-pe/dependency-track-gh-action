@@ -2,7 +2,7 @@ import os
 
 def create(license_violations):
         
-    with open ("job_summary.md", "w") as f:
+    with open ("/home/runner/work/dependency-check-test/job_summary.md", "w") as f:
         f.write("# Dependency Check Summary \n")
         f.write(" --- \n")
         f.write("### License Violations\n")
@@ -18,4 +18,4 @@ def create(license_violations):
                     violation["app_name"], violation["language"], 
                     violation["dependency_name"], violation["license_name"]
              ))
-    print("Job summary report created {}".format(os.path.abspath("job_summary.md")))
+    print("Job summary report created {}".format(os.path.abspath("/home/runner/work/dependency-check-test/job_summary.md")))
