@@ -65,8 +65,10 @@ def main():
         if config["block_build"]:
             print("exiting...")
             exit(1)
+    else:
+         print("[OK] no license violations found")
             
-    print("[OK] no license violations found")
+   
 
 if __name__ == "__main__":
     main()
