@@ -1,6 +1,7 @@
 import rubygeminfo
 import nodedepinfo
 import pythondepinfo
+import action_summary
 import os
 import tools
 import yaml
@@ -53,7 +54,9 @@ def main():
                             "dependency_name": dependency_name,
                             "license_name": license_name
                         })
-                        
+                   
+    action_summary.create(license_violations)
+         
     if license_violations:
         for violation in license_violations:
             print()
