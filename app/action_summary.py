@@ -18,4 +18,9 @@ def create(license_violations):
                     violation["app_name"], violation["language"], 
                     violation["dependency_name"], violation["license_name"]
              ))
+
+    with open("job_summary.md", "r")  as fr:
+        os.environ["GITHUB_STEP_SUMMARY"] = fr.read()
+        
     print("Job summary report created {}".format(os.path.abspath("job_summary.md")))
+     
