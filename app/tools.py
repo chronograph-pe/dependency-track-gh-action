@@ -36,6 +36,7 @@ def is_language_supported(language):
     
 def check_for_violations(license_data, restricted_licenses_file, dependency_exceptions_file):
     violations = []
+    exceptions = []
 
     with open(restricted_licenses_file) as f:
         restricted_licenses = json.load(f)
@@ -49,8 +50,9 @@ def check_for_violations(license_data, restricted_licenses_file, dependency_exce
                 for restricted_license in restricted_licenses:
                     if restricted_license in license_name:
                         if dependency_name in dependency_exceptions:
-                                print(" ##### Violation found but explicitly excepted. Dependency name: {},  License name: {} ##### ".format(dependency_name, restricted_license))
-                                continue
+                            print(" ##### Violation found but explicitly excepted. Dependency name: {},  License name: {} ##### ".format(dependency_name, restricted_license))
+                            exceptions.append({dependency_name: restricted_license})
+                            continue
                         violations.append({dependency_name: restricted_license})
                         
-    return violations
+    return violations, exceptions

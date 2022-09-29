@@ -13,6 +13,8 @@ dependency_check_config_file = os.environ.get(
 
 def main():
     license_violations = []
+    license_exceptions = []
+    all_dependencies = []
     
     if not os.path.exists(dependency_check_config_file):
         print("{} not found".format(dependency_check_config_file))
@@ -41,8 +43,14 @@ def main():
             
             if language == "node":
                 license_data = nodedepinfo.licenses(dependency_file, app_name, license_file)
+                
+            all_dependencies.append({
+                "app_name": app_name,
+                "language": language,
+                "license_data": license_data
+            })
 
-            violations = tools.check_for_violations(
+            violations, exceptions = tools.check_for_violations(
                 license_data, restricted_licenses_file, dependency_exceptions_file)
 
             if violations:
@@ -54,8 +62,19 @@ def main():
                             "dependency_name": dependency_name,
                             "license_name": license_name
                         })
+                        
+            if exceptions:
+                for exception in exceptions:
+                    for dependency_name, license_name in exception.items():
+                        license_exceptions.append({
+                            "app_name": app_name,
+                            "language": language,
+                            "dependency_name": dependency_name,
+                            "license_name": license_name
+                        })
                    
-    action_summary.create(license_violations)
+    action_summary.create(license_violations, license_exceptions, all_dependencies)
+    print(all_dependencies)
          
     if license_violations:
         for violation in license_violations:
