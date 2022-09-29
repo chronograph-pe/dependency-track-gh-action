@@ -47,6 +47,3 @@ The `restricted_licenses.json` file contains a list of dependency licenses you d
 ```
 
 The `dependency_exceptions.json` file contains a list of dependency names you want to skip checks for. Follow the same schema as the `restricted_licenses.json` except use dependency names. You can look in `license_file.json` to find valid names, or look in the github action console output. 
-
-## Example App
-https://github.com/chronograph-pe/dependency-check-test
