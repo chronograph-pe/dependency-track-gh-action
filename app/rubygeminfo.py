@@ -1,25 +1,55 @@
+from distutils.util import split_quoted
 from gemfileparser2 import GemfileParser
 import requests
 import json
 from pathlib import Path
 
-
 def licenses(dependency_file, app_name, license_file):
     licenses = {}
 
-    n = GemfileParser(dependency_file, app_name)
-    dependency_dictionary = n.parse()
+    gem_names = parse_gemfile(dependency_file)
 
-    for env, dependencies in dependency_dictionary.items():
-        print("Finding licenses for gems in {}...".format(env))
-        if dependencies:
-            gem_names = []
-            for gem in dependencies:
-                gem_names.append(gem.name)
-            lics = get_licenses(gem_names, license_file)
-            licenses[env] = lics
+    print("Finding licenses for gems in runtime...")
+
+    lics = get_licenses(gem_names, license_file)
+    licenses["runtime"] = lics        
     
     return licenses
+
+
+def parse_gemfile(dependency_file):
+    deps = []
+    full_deps = []
+    with open(dependency_file) as f:
+        lines = [line.strip() for line in f]
+
+    hit = False
+    for line in lines:
+        if "specs:" in line:
+            hit = True
+
+        if "PLATFORMS" in line:
+            hit = False
+
+        if hit is True:
+            if "specs:" in line:
+                continue
+            elif "PLATFORMS" in line:
+                continue
+            elif not line:
+                continue
+
+            deps.append(line)
+
+    for dep in deps:
+        split_dep = dep.split(" ", 1)
+        if len(split_dep) > 1:
+            dep_name = split_dep[0]
+            dep_version = split_dep[1]
+            if dep_version[1].isdigit():
+                full_deps.append("{}@{}".format(dep_name, dep_version[1:-1]))
+
+    return full_deps
 
 
 def get_licenses(gem_names, license_file):
@@ -42,9 +72,12 @@ def get_licenses(gem_names, license_file):
     return licenses
 
 
-def fetch_license(gem_name):
+def fetch_license(lock_gem_name):
+    gem_name = lock_gem_name.split("@")[0]
+    gem_version = lock_gem_name.split("@")[1]
+
     r = requests.get(
-        'https://rubygems.org/api/v1/gems/{}.json'.format(gem_name))
+        'https://rubygems.org/api/v2/rubygems/{}/versions/{}.json'.format(gem_name, gem_version))
     
     if r.status_code != 200:
         print("error retrieving {} license. skipping adding to licenses.json.".format(gem_name))

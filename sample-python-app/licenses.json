@@ -1,35 +1,35 @@
 {
-    "Flask": [
-        "BSD-3-Clause"
+    "Flask@0.10.1": [
+        "BSD"
     ],
-    "Jinja2": [
-        "BSD-3-Clause"
+    "Jinja2@2.7.3": [
+        "BSD"
     ],
-    "MarkupSafe": [
-        "BSD-3-Clause"
+    "MarkupSafe@0.23": [
+        "BSD"
     ],
-    "Werkzeug": [
-        "BSD-3-Clause"
+    "Werkzeug@0.9.6": [
+        "BSD"
     ],
-    "gnureadline": [
-        "unknown"
+    "gnureadline@6.3.3": [
+        "GNU GPL"
     ],
-    "itsdangerous": [
-        "BSD-3-Clause"
+    "itsdangerous@0.24": [
+        "UNKNOWN"
     ],
-    "rauth": [
+    "rauth@0.7.0": [
         "MIT"
     ],
-    "requests": [
+    "requests@2.3.0": [
         "Apache 2.0"
     ],
-    "wsgiref": [
+    "wsgiref@0.1.2": [
         "PSF or ZPL"
     ],
-    "gunicorn": [
+    "gunicorn@18.0": [
         "MIT"
     ],
-    "Flask-SSLify": [
+    "Flask-SSLify@0.1.4": [
         "BSD"
     ]
 }

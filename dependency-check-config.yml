@@ -3,12 +3,12 @@ apps:
       license_file: sample-ruby-app/licenses.json
       dependency_exceptions_file: sample-ruby-app/dependency_exceptions.json
       language: ruby
-      dependency_file: sample-ruby-app/Gemfile
+      dependency_file: sample-ruby-app/Gemfile.lock
   - sample_node_app:
       license_file: sample-node-app/licenses.json
       dependency_exceptions_file: sample-node-app/dependency_exceptions.json
       language: node
-      dependency_file: sample-node-app/package.json
+      dependency_file: sample-node-app/package-lock.json
   - sample_python_app:
       license_file: sample-python-app/licenses.json
       dependency_exceptions_file: sample-python-app/dependency_exceptions.json
