@@ -9,11 +9,14 @@ supported_languages = os.environ.get(
 def check_config_files(config):
     apps = config["apps"]
     errors = []
+    allowed_licenses_file = config["allowed_licenses_file"]
+
+    if not os.path.exists(allowed_licenses_file):
+        errors.append("allowed_license_file required but not found")
     
     for app in apps:
         for app_name, app_config in app.items():
             license_file = app_config["license_file"]
-            restricted_licenses_file = app_config["restricted_licenses_file"]
             dependency_exceptions_file = app_config["dependency_exceptions_file"]
             language = app_config["language"]
             dependency_file = app_config["dependency_file"]
@@ -21,7 +24,7 @@ def check_config_files(config):
             err = is_language_supported(language)
             if err: errors.append(err)
             
-            for f in [license_file, restricted_licenses_file, dependency_exceptions_file, dependency_file]:
+            for f in [license_file, dependency_exceptions_file, dependency_file]:
                 if not os.path.exists(f): errors.append("{} required but not found".format(f))
                         
     return errors
@@ -32,27 +35,37 @@ def is_language_supported(language):
         return "{} not a supported languaage at this time".format(language)
     
     return ""
-    
-    
-def check_for_violations(license_data, restricted_licenses_file, dependency_exceptions_file):
+
+
+def check_for_violations(license_data, allowed_licenses_file, dependency_exceptions_file):
     violations = []
     exceptions = []
+    unknown_licenses = []
 
-    with open(restricted_licenses_file) as f:
-        restricted_licenses = json.load(f)
+    with open(allowed_licenses_file) as f:
+        a = json.load(f)
+        allowed_licenses = [item.lower() for item in a]
 
     with open(dependency_exceptions_file) as f:
-        dependency_exceptions = json.load(f)
-        
+        d = json.load(f)
+        dependency_exceptions = [item.lower() for item in d]
+
     for env, dependencies in license_data.items():
         for dependency in dependencies:
-            for dependency_name, license_name in dependency.items():
-                for restricted_license in restricted_licenses:
-                    if restricted_license in license_name:
-                        if dependency_name in dependency_exceptions:
-                            print(" ##### Violation found but explicitly excepted. Dependency name: {},  License name: {} ##### ".format(dependency_name, restricted_license))
-                            exceptions.append({dependency_name: restricted_license})
-                            continue
-                        violations.append({dependency_name: restricted_license})
-                        
-    return violations, exceptions
+            for dependency_name, l in dependency.items():
+                if type(l) == list:
+                    license_name = l[0]
+                else:
+                    license_name = str(l)
+                if license_name.lower() not in allowed_licenses:
+                    if dependency_name.lower() in dependency_exceptions:
+                        print(" ##### Violation found but explicitly excepted. Dependency name: {},  License name: {} ##### ".format(dependency_name, license_name))
+                        exceptions.append({dependency_name: license_name})
+                        continue
+                    if license_name.lower() == "unknown":
+                        print(" ##### Unknown license for a dependency found . Dependency name: {},  License name: {} ##### ".format(dependency_name, license_name))
+                        unknown_licenses.append({dependency_name: license_name})
+                        continue
+                    violations.append({dependency_name: license_name})
+
+    return violations, exceptions, unknown_licenses

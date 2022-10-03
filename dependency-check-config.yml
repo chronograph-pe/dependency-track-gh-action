@@ -1,20 +1,18 @@
 apps:
   - sample_ruby_app:
       license_file: sample-ruby-app/licenses.json
-      restricted_licenses_file: sample-ruby-app/restricted_licenses.json
       dependency_exceptions_file: sample-ruby-app/dependency_exceptions.json
       language: ruby
       dependency_file: sample-ruby-app/Gemfile
   - sample_node_app:
       license_file: sample-node-app/licenses.json
-      restricted_licenses_file: sample-node-app/restricted_licenses.json
       dependency_exceptions_file: sample-node-app/dependency_exceptions.json
       language: node
       dependency_file: sample-node-app/package.json
   - sample_python_app:
       license_file: sample-python-app/licenses.json
-      restricted_licenses_file: sample-python-app/restricted_licenses.json
       dependency_exceptions_file: sample-python-app/dependency_exceptions.json
       language: python
       dependency_file: sample-python-app/requirements.txt
 block_build: False
+allowed_licenses_file: ./allowed_licenses.json
