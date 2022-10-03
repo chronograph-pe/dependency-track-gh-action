@@ -7,9 +7,12 @@ def licenses(dependency_file, app_name, license_file):
     
     with open(dependency_file) as f:
         dependency_dictionary = json.load(f)
+
+    packages = dependency_dictionary.get("packages")
+    packages_key = next(iter(packages))
         
-    dev_dependencies = dependency_dictionary.get("devDependencies")
-    prod_dependencies = dependency_dictionary.get("dependencies")
+    dev_dependencies = packages[packages_key].get("devDependencies")
+    prod_dependencies = packages[packages_key].get("dependencies")
 
     dependencies["development"] = dev_dependencies
     dependencies["production"] = prod_dependencies
@@ -29,32 +32,35 @@ def get_licenses(dependencies, license_file):
         licenses = []
         print("Finding licenses for dependencies in {}...".format(env))
         for dep_name, dep_version in deps.items():
-            license = dependency_data.get(dep_name)
+            dep_version = dep_version.strip("^")
+            dep_lock_version = "{}@{}".format(dep_name, dep_version)
+            license = dependency_data.get(dep_lock_version)
             if license:
-                licenses.append({dep_name: license})
+                licenses.append({dep_lock_version: license})
             else:
-                print("{} not found in database. fetching from registry.npmjs.org...".format(dep_name))
-                license = fetch_license(dep_name)
-                licenses.append({dep_name: license})
+                print("{} not found in database. fetching from registry.npmjs.org...".format(dep_lock_version))
+                license = fetch_license(dep_name, dep_version)
+                licenses.append({dep_lock_version: license})
                 if license:
-                    add_dep_to_license_file(dep_name, license, license_file)
+                    add_dep_to_license_file(dep_lock_version, license, license_file)
         full_deps[env] = licenses
                 
     return full_deps
 
 
-def fetch_license(dep_name):
+def fetch_license(dep_name, dep_version):
     r = requests.get(
-        'https://registry.npmjs.org/{}'.format(dep_name))
+        'https://registry.npmjs.org/{}/{}'.format(dep_name, dep_version))
     
     if r.status_code != 200:
-        print("error retrieving {} license. skipping adding to licenses.json.".format(dep_name))
+        print("error retrieving {}@{} license. skipping adding to licenses.json.".format(
+            dep_name, dep_version))
         return False
     
     data = r.json()
 
     if not data.get("license"):
-        print("[WARN] No license info found for {}".format(dep_name))
+        print("[WARN] No license info found for {}@{}".format(dep_name, dep_version))
         return ["unknown"]
     
     return [data.get("license")]

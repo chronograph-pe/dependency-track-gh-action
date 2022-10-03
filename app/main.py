@@ -44,7 +44,7 @@ def main():
             
             if language == "node":
                 license_data = nodedepinfo.licenses(dependency_file, app_name, license_file)
-                
+               
             all_dependencies.append({
                 "app_name": app_name,
                 "language": language,
