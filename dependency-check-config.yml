@@ -1,9 +1,8 @@
 apps:
-  - sample_node_app:
-      license_file: sample-node-app/licenses.json
-      dependency_exceptions_file: sample-node-app/dependency_exceptions.json
-      language: node
-      dependency_file: sample-node-app/package-lock.json
-
+  - sample_python_app:
+      license_file: sample-python-app/licenses.json
+      dependency_exceptions_file: sample-python-app/dependency_exceptions.json
+      language: python
+      dependency_file: sample-python-app/requirements.txt
 block_build: False
 allowed_licenses_file: ./allowed_licenses.json

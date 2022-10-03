@@ -8,9 +8,13 @@ def licenses(dependency_file, app_name, license_file):
     with open(dependency_file) as f:
         dependency_dictionary = json.load(f)
 
-    packages = dependency_dictionary.get("packages")
-    packages_key = next(iter(packages))
-        
+    try:
+        packages = dependency_dictionary.get("packages")
+        packages_key = next(iter(packages))
+    except Exception as e:
+        raise SystemExit(
+            "unable to parse node package-lock.json file. valid lock file required -> {}".format(e))
+
     dev_dependencies = packages[packages_key].get("devDependencies")
     prod_dependencies = packages[packages_key].get("dependencies")
 
