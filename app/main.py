@@ -14,6 +14,7 @@ dependency_check_config_file = os.environ.get(
 def main():
     license_violations = []
     license_exceptions = []
+    unknown_depedency_licenses = []
     all_dependencies = []
     
     if not os.path.exists(dependency_check_config_file):
@@ -30,7 +31,7 @@ def main():
             print("-- Generating license data for {}".format(app_name))
             
             license_file = app_config["license_file"]
-            restricted_licenses_file = app_config["restricted_licenses_file"]
+            allowed_licenses_file = config["allowed_licenses_file"]
             dependency_exceptions_file = app_config["dependency_exceptions_file"]
             language = app_config["language"]
             dependency_file = app_config["dependency_file"]
@@ -50,8 +51,8 @@ def main():
                 "license_data": license_data
             })
 
-            violations, exceptions = tools.check_for_violations(
-                license_data, restricted_licenses_file, dependency_exceptions_file)
+            violations, exceptions, unknown_licenses = tools.check_for_violations(
+                license_data, allowed_licenses_file, dependency_exceptions_file)
 
             if violations:
                 for violation in violations:
@@ -72,9 +73,29 @@ def main():
                             "dependency_name": dependency_name,
                             "license_name": license_name
                         })
+
+            if unknown_licenses:
+                for unknown_license in unknown_licenses:
+                    for dependency_name, license_name in unknown_license.items():
+                        unknown_depedency_licenses.append({
+                            "app_name": app_name,
+                            "language": language,
+                            "dependency_name": dependency_name,
+                            "license_name": license_name
+                        })
                    
-    action_summary.create(license_violations, license_exceptions, all_dependencies)
-    print(all_dependencies)
+    action_summary.create(
+        license_violations, license_exceptions, unknown_depedency_licenses, all_dependencies)
+
+    if unknown_depedency_licenses:
+        for unknown_license in unknown_depedency_licenses:
+            print()
+            print("############ UNKNOWN DEPENDENCY LICENSE ###########")
+            print("App name: {}".format(unknown_license["app_name"]))
+            print("Language: {}".format(unknown_license["language"]))
+            print("Dependency name: {}".format(unknown_license["dependency_name"]))
+            print("License name: {}".format(unknown_license["license_name"]))
+            print("###################################################")
          
     if license_violations:
         for violation in license_violations:
@@ -90,7 +111,10 @@ def main():
             print("exiting...")
             exit(1)
     else:
-         print("[OK] No license violations found")
+        print()
+        print("###################################################")
+        print("[OK] No license violations found")
+        print("###################################################")
             
    
 

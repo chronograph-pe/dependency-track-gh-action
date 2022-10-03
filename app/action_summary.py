@@ -1,6 +1,6 @@
 import os
 
-def create(license_violations, license_exceptions, all_dependencies):
+def create(license_violations, license_exceptions, unknown_depedency_licenses, all_dependencies):
         
     with open ("job_summary.md", "w") as f:
         f.write("# Dependency Check Summary \n")
@@ -17,6 +17,20 @@ def create(license_violations, license_exceptions, all_dependencies):
                 f.write("| {} | {} | {} | {} |\n".format(
                     violation["app_name"], violation["language"], 
                     violation["dependency_name"], violation["license_name"]
+             ))
+
+        f.write("### Unknown dependency licenses\n")
+        f.write("")
+        f.write("")
+        if not unknown_depedency_licenses:
+            f.write("#### No unknown dependency licenses\n\n")
+        else:
+            f.write("| App Name | Language | Dependency Name | License Name\n")
+            f.write("| ------ | ------ | ------ | ------ | \n")
+            for unknown_license in unknown_depedency_licenses:
+                f.write("| {} | {} | {} | {} |\n".format(
+                    unknown_license["app_name"], unknown_license["language"], 
+                    unknown_license["dependency_name"], unknown_license["license_name"]
              ))
                 
         f.write("\n### Dependencies Not Included In Check\n")
