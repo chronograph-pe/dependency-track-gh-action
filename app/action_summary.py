@@ -37,7 +37,7 @@ def create(license_violations, license_exceptions, unknown_depedency_licenses, a
         f.write("")
         f.write("")
         f.write("| App Name | Language | Dependency Name | License Name | Reason\n")
-        f.write("| ------ | ------ | ------ | ------ | ------ | ------ | \n")
+        f.write("| ------ | ------ | ------ | ------ | ------ | \n")
         for exception in license_exceptions:
             f.write("| {} | {} | {} | {} | {} \n".format(
                 exception["app_name"], exception["language"], 
