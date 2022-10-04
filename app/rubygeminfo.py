@@ -79,7 +79,7 @@ def fetch_license(lock_gem_name):
     
     if r.status_code != 200:
         print("error retrieving {} license. skipping adding to licenses.json.".format(gem_name))
-        return False
+        return ["unknown"]
     
     data = r.json()
 

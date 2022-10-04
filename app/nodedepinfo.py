@@ -81,7 +81,7 @@ def fetch_license(dep_name, dep_version):
     if r.status_code != 200:
         print("error retrieving {}@{} license. skipping adding to licenses.json.".format(
             dep_name, dep_version))
-        return False
+        return ["unknown"]
     
     data = r.json()
 
