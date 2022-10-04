@@ -80,27 +80,28 @@ def check_for_violations(license_data, allowed_licenses_file, dependency_excepti
 
 
 def get_license_names(license_list):
-    license_name = None
-    
-    while type(license_name) != str:
-        if type(license_list) == list:
-            license_name = ', '.join(license_list)
-        elif type(license_list) == dict:
-            license_name = license_list.get("type", "unknown")
-        else:
-            license_name = str(license_list)
+    parsed_licenses = []
 
-        license_list = license_name
+    if type(license_list) == list:
+        for lic in license_list:
+            if type(lic) == str:
+                if "and" in lic.lower():
+                    n = lic.strip("(").strip(")")
+                    parsed_licenses.append(n)
+                    break
+                if "or" in lic.lower():
+                    parsed_licenses = lic.lower().split("or")
+                    parsed_licenses = [s.replace("(", "") for s in parsed_licenses]
+                    parsed_licenses = [s.replace(")", "") for s in parsed_licenses]
+                    parsed_licenses = [s.strip() for s in parsed_licenses]
+                    break
+                
+                parsed_licenses = license_list
 
-    if "or" in license_name.lower():
-        licenses = license_name.lower().split("or")
-        licenses = [s.replace("(", "") for s in licenses]
-        licenses = [s.replace(")", "") for s in licenses]
-        licenses = [s.strip() for s in licenses]
-    else:
-        licenses = [license_name.strip()]
-
-    return licenses
+    elif type(license_list) == bool:
+        parsed_licenses = [str(license_list)]
+        
+    return parsed_licenses
 
 
 def find_exception(dependency_exceptions, dependency_name):
