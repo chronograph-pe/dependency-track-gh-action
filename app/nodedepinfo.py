@@ -3,27 +3,49 @@ import json
 
 
 def licenses(dependency_file, app_name, license_file):
-    dependencies = {}
     
     with open(dependency_file) as f:
         dependency_dictionary = json.load(f)
 
-    try:
-        packages = dependency_dictionary.get("packages")
-        packages_key = next(iter(packages))
-    except Exception as e:
-        raise SystemExit(
-            "unable to parse node package-lock.json file. valid lock file required -> {}".format(e))
+    if dependency_dictionary.get("lockfileVersion") == 2:
+        dependencies = parse_v2_lock_file(dependency_dictionary)
+    elif dependency_dictionary.get("lockfileVersion") == 1:
+        dependencies = parse_v1_lock_file(dependency_dictionary)
+    else:
+        print("unable to parse node package-lock.json file. valid lock file required")
+        exit(1)
+    
+    licenses = get_licenses(dependencies, license_file)
+        
+    return licenses
 
+
+def parse_v2_lock_file(dependency_dictionary):
+    dependencies = {}
+
+    packages = dependency_dictionary.get("packages")
+    packages_key = next(iter(packages))
     dev_dependencies = packages[packages_key].get("devDependencies")
     prod_dependencies = packages[packages_key].get("dependencies")
 
     dependencies["development"] = dev_dependencies
     dependencies["production"] = prod_dependencies
-    
-    licenses = get_licenses(dependencies, license_file)
-        
-    return licenses
+
+    return dependencies
+
+
+def parse_v1_lock_file(dependency_dictionary):
+    dependencies = {}
+    d = {}
+
+    packages = dependency_dictionary.get("dependencies")
+    for package_name, package_metadata in packages.items():
+        version = package_metadata.get("version")
+        d[package_name] = version
+
+    dependencies["production"] = d
+
+    return dependencies
 
 
 def get_licenses(dependencies, license_file):

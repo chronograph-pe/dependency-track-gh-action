@@ -8,8 +8,16 @@ def licenses(dependency_file, app_name, license_file):
     with open(dependency_file) as f:
         dep_names = []
         for req in requirements.parse(f):
-            dep_verion = req.specs[0][1]
-            dep_names.append("{}@{}".format(req.name, dep_verion))
+            
+            if not req.specs:
+                dep_version = "latest"
+            elif req.specs[0][0] == "==":
+                dep_version = req.specs[0][1]
+            else:
+                print("unable to parse requirements.txt file")
+                exit(1)
+            
+            dep_names.append("{}@{}".format(req.name, dep_version))
 
     dependencies["production"] = dep_names
         
@@ -44,8 +52,12 @@ def get_licenses(dependencies, license_file):
 
 
 def fetch_license(dep_name, dep_version):
-    r = requests.get(
-        'https://pypi.org/pypi/{}/{}/json'.format(dep_name, dep_version))
+    if dep_version == "latest":
+        r = requests.get(
+            'https://pypi.org/pypi/{}/json'.format(dep_name))
+    else:
+        r = requests.get(
+            'https://pypi.org/pypi/{}/{}/json'.format(dep_name, dep_version))
     
     if r.status_code != 200:
         print("error retrieving {}@{} license. skipping adding to licenses.json.".format(

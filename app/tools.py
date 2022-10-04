@@ -53,10 +53,17 @@ def check_for_violations(license_data, allowed_licenses_file, dependency_excepti
     for env, dependencies in license_data.items():
         for dependency in dependencies:
             for dependency_name, l in dependency.items():
-                if type(l) == list:
-                    license_name = l[0]
-                else:
-                    license_name = str(l)
+                license_name = None
+                while type(license_name) != str:
+                    if type(l) == list:
+                        license_name = l[0]
+                    elif type(l) == dict:
+                        license_name = l.get("type", "unknown")
+                    else:
+                        license_name = str(l)
+
+                    l = license_name
+
                 if license_name.lower() not in allowed_licenses:
                     if dependency_name.lower() in dependency_exceptions:
                         print(" ##### Violation found but explicitly excepted. Dependency name: {},  License name: {} ##### ".format(dependency_name, license_name))

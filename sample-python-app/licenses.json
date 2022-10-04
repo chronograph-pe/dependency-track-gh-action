@@ -1,7 +1,4 @@
 {
-    "Flask@0.10.1": [
-        "BSD"
-    ],
     "Jinja2@2.7.3": [
         "BSD"
     ],
@@ -20,9 +17,6 @@
     "rauth@0.7.0": [
         "MIT"
     ],
-    "requests@2.3.0": [
-        "Apache 2.0"
-    ],
     "wsgiref@0.1.2": [
         "PSF or ZPL"
     ],
@@ -31,5 +25,11 @@
     ],
     "Flask-SSLify@0.1.4": [
         "BSD"
+    ],
+    "Flask@latest": [
+        "BSD-3-Clause"
+    ],
+    "requests@latest": [
+        "Apache 2.0"
     ]
 }
