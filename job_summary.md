@@ -5,6 +5,8 @@
 | ------ | ------ | ------ | ------ | 
 | sample_python_app | python | gnureadline@6.3.3 | GNU GPL |
 | sample_python_app | python | requests@latest | Apache 2.0 |
+| sample_python_app | python | wsgiref@0.1.2 | psf |
+| sample_python_app | python | wsgiref@0.1.2 | zpl |
 | sample_ruby_app | ruby | json@1.8.3 | Ruby |
 | sample_ruby_app | ruby | pkg-config@1.1.7 | LGPLv2+ |
 | sample_ruby_app | ruby | rdoc@4.2.2 | Ruby |
@@ -13,26 +15,20 @@
 | sample_node_app | node | babel-plugin-rewire-ts@1.4.0 | ISC |
 | sample_node_app | node | check-node-version@4.0.3 | Unlicense |
 | sample_node_app | node | child_process@1.0.2 | ISC |
-| sample_node_app | node | eslint-config-chronograph@git+https://github.com/chronograph-pe/eslint-config-chronograph.git | False |
 | sample_node_app | node | eslint-import-resolver-typescript@2.0.0 | ISC |
 | sample_node_app | node | extract-loader@3.1.0 | Unlicense |
 | sample_node_app | node | hard-source-webpack-plugin@0.13.1 | ISC |
 | sample_node_app | node | typescript@4.6.2 | Apache-2.0 |
 | sample_node_app | node | @chamaeleonidae/chmln@1.0.0-alpha.2 | Apache-2.0 |
-| sample_node_app | node | ag-grid-community-latest@npm:ag-grid-community@^24.1.0 | False |
-| sample_node_app | node | ag-grid-enterprise@14.2.0 | Commercial |
-| sample_node_app | node | ag-grid-enterprise-latest@npm:ag-grid-enterprise@^24.1.0 | False |
-| sample_node_app | node | ag-grid-react-latest@npm:ag-grid-react@^24.1.1 | False |
 | sample_node_app | node | aws-sdk@2.1093.0 | Apache-2.0 |
 | sample_node_app | node | docxtemplater-html-module@https://modules.docxtemplater.com/packages/v2/billing_chronograph/e281579e-b7a0-48b2-7fb2-ca6cdddb5456/html-module-3.22.9.tar.gz | False |
 | sample_node_app | node | docxtemplater-image-module@https://modules.docxtemplater.com/packages/v2/billing_chronograph/e281579e-b7a0-48b2-7fb2-ca6cdddb5456/image-module-3.6.1.tar.gz | False |
 | sample_node_app | node | dom-to-image@git+https://github.com/chronograph-pe/dom-to-image.git | False |
-| sample_node_app | node | dompurify@2.0.7 | MPL-2.0 OR Apache-2.0 |
+| sample_node_app | node | dompurify@2.0.7 | mpl-2.0 |
+| sample_node_app | node | dompurify@2.0.7 | apache-2.0 |
 | sample_node_app | node | graphiql-explorer@0.4.4 | SEE LICENSE IN LICENSE |
 | sample_node_app | node | http@* | False |
 | sample_node_app | node | jsonexport@3.1.0 | Apache-2.0 |
-| sample_node_app | node | jszip@2.6.1 | (MIT OR GPL-3.0) |
-| sample_node_app | node | jszip-utils@0.0.2 | MIT or GPLv3 |
 | sample_node_app | node | qrcode.react@0.9.3 | ISC |
 | sample_node_app | node | react-ga@2.2.0 | Apache-2.0 |
 | sample_node_app | node | react-slick@github:chronograph-pe/react-slick | False |
@@ -56,7 +52,12 @@
 
 ### Dependencies Not Included In Check
 | App Name | Language | Dependency Name | License Name | Reason
-| ------ | ------ | ------ | ------ | ------ | 
+| ------ | ------ | ------ | ------ | ------ | ------ | 
+| sample_node_app | node | eslint-config-chronograph@git+https://github.com/chronograph-pe/eslint-config-chronograph.git | False | Chronograph developed library 
+| sample_node_app | node | ag-grid-community-latest@npm:ag-grid-community@^24.1.0 | False | Purchased license 
+| sample_node_app | node | ag-grid-enterprise@14.2.0 | Commercial | Purchased license 
+| sample_node_app | node | ag-grid-enterprise-latest@npm:ag-grid-enterprise@^24.1.0 | False | Purchased license 
+| sample_node_app | node | ag-grid-react-latest@npm:ag-grid-react@^24.1.1 | False | Purchased license 
 
 ### All Checked Dependencies
 | App Name | Language | Dependency Name | License Name |

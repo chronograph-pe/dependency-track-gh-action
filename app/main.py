@@ -32,7 +32,7 @@ def main():
             
             license_file = app_config["license_file"]
             allowed_licenses_file = config["allowed_licenses_file"]
-            dependency_exceptions_file = app_config["dependency_exceptions_file"]
+            dependency_exceptions_file = config["dependency_exceptions_file"]
             language = app_config["language"]
             dependency_file = app_config["dependency_file"]
             
@@ -66,12 +66,13 @@ def main():
                         
             if exceptions:
                 for exception in exceptions:
-                    for dependency_name, license_name in exception.items():
+                    for dependency_name, dependency_meta_data in exception.items():
                         license_exceptions.append({
                             "app_name": app_name,
                             "language": language,
                             "dependency_name": dependency_name,
-                            "license_name": license_name
+                            "license_name": dependency_meta_data["license_name"],
+                            "exception_reason": dependency_meta_data["exception_reason"]
                         })
 
             if unknown_licenses:

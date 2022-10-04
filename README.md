@@ -9,25 +9,23 @@ A github action to check if our apps our using dependencies with non-approved li
 apps:
   - {app_name_01}:
       license_file: sample-python-app/licenses.json
-      dependency_exceptions_file: sample-python-app/dependency_exceptions.json
       language: python
       dependency_file: sample-python-app/requirements.txt
   - {app_name_02}:
       license_file: sample-ruby-app/licenses.json
-      dependency_exceptions_file: sample-ruby-app/dependency_exceptions.json
       language: ruby
       dependency_file: sample-ruby-app/Gemfile.lock
   - {app_name_03}:
       license_file: sample-node-app/licenses.json
-      dependency_exceptions_file: sample-node-app/dependency_exceptions.json
       language: node
       dependency_file: sample-node-app/package-lock-v2.json
 block_build: False
 allowed_licenses_file: ./allowed_licenses.json
+dependency_exceptions_file: ./dependency-exceptions.json
 ```
 2.  Create the following files:
--- `license_file_.json` in each app directory. The content of this file should be `{}` for initial setup.
--- `dependency_exceptions.json` in each app directory. The contents are a list of dependencies you do not want to be scanned for license violations. If there are no exceptions, the file must contain an empty list -> `[]`.
+-- `license-file_.json` in each app directory. The content of this file should be `{}` for initial setup.
+-- `dependency-exceptions.json` in the repo root directory. The contents are a list of dependencies you do not want to be scanned for license violations. If there are no exceptions, the file must contain an empty list -> `[]`.
 -- `allowed_licenses.json` in the repo root directory. The contents are a list of licenses you allow to be used in your apps. by default all other licenses will be restricted. 
 
 3. Create the following github action workflow file in `.github/workflows/dependency-check.yml`:
@@ -69,6 +67,25 @@ jobs:
           rm -rf dependency-track-gh-action
       - name: Commit license data to this branch
         uses: chronograph-pe/git-auto-commit-action@v4
+```
+
+## Usage
+1. Populate `allowed-licenses.json` with a list of approved dependency licenses. If a depedency has two licenses, the scanner will check the allowed list for both licenses and match on one. 
+2. If you need to bypass scanning for a depedency populate `dependency-exceptions.json` with the following format:
+```json
+{
+  # depedency names can have wildcards
+  "{depedency_name}": "{reason you are creating this exception}"
+}
+
+example:
+{
+    "cg-shared*": "Chronograph developed library",
+    "*chronograph": "Chronograph developed library",
+    "cg-gql*": "Chronograph developed library",
+    "cg-lambda*": "Chronograph developed library",
+    "ag-grid-*": "Purchased license"
+}
 ```
 
 ## Results
