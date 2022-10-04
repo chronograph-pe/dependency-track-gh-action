@@ -1,8 +1,6 @@
-from distutils.util import split_quoted
-from gemfileparser2 import GemfileParser
 import requests
 import json
-from pathlib import Path
+
 
 def licenses(dependency_file, app_name, license_file):
     licenses = {}
