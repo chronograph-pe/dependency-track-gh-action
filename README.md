@@ -4,46 +4,78 @@ A github action to check if our apps our using dependencies with non-approved li
 
 ## Installation
 
-1. Add `dependency-check-config.yml` to the root of a repo you want to check licenses for. The repo can contain multiple apps you want to scan.  
-2. Use the following configuration to the yaml as a template...
+1. Create a file called `dependency-check-config.yml` to the root of a repo you want to check licenses for. The repo can contain multiple apps inside of a single repo. Use the following as a template for the file contents:
 ```yaml
 apps:
-  # A list of apps in your repo that you want to check licenses for
-  - {app_name}:
-      # A file (can be empty) that the action will store dependencies 
-      # and their licenses. This is used to cache license data 
-      # obtained remotely. 
+  - {app_name_01}:
+      license_file: sample-python-app/licenses.json
+      dependency_exceptions_file: sample-python-app/dependency_exceptions.json
+      language: python
+      dependency_file: sample-python-app/requirements.txt
+  - {app_name_02}:
       license_file: sample-ruby-app/licenses.json
-      # A file (can be empty) to store licenses you do not want
-      # to be used in your apps. 
-      restricted_licenses_file: sample-ruby-app/restricted_licenses.json
-      # A file (can be empty) to store dependencies that will 
-      # bypass license checks.
       dependency_exceptions_file: sample-ruby-app/dependency_exceptions.json
-      # Currently supports ruby, python, and node
       language: ruby
-      # The location of your dependency file (currently supports Gemfile, 
-      # package.json, and requirements.txt.
-      dependency_file: sample-ruby-app/Gemfile
-# If set to true, license violations will return an exit(1) to block a build
+      dependency_file: sample-ruby-app/Gemfile.lock
+  - {app_name_03}:
+      license_file: sample-node-app/licenses.json
+      dependency_exceptions_file: sample-node-app/dependency_exceptions.json
+      language: node
+      dependency_file: sample-node-app/package-lock-v2.json
 block_build: False
+allowed_licenses_file: ./allowed_licenses.json
 ```
-3. Add `license_file.json`, `restricted_licenses.json`, and `dependency_exceptions.json` files to your app directory. Add `{}` to all these files before first run.  
+2.  Create the following files:
+-- `license_file_.json` in each app directory. The content of this file should be `{}` for initial setup.
+-- `dependency_exceptions.json` in each app directory. The contents are a list of dependencies you do not want to be scanned for license violations. If there are no exceptions, the file must contain an empty list -> `[]`.
+-- `allowed_licenses.json` in the repo root directory. The contents are a list of licenses you allow to be used in your apps. by default all other licenses will be restricted. 
 
-## Usage
+3. Create the following github action workflow file in `.github/workflows/dependency-check.yml`:
+```yaml
+name: Dependency Check
 
-The `license_file.json` file will contain a list of dependencies and their licenses that are scanned via this action. The license is used to cache data so we don't have to look to outside sources for license data every run. The action will auto-commit updates as needed. 
+on:
+  push:
+    branches: [ "dev" ]
+  pull_request:
+    branches: [ "dev" ]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: chronograph-pe/checkout@v3
 
-No need to touch this file after initial creation.
-
-The `restricted_licenses.json` file contains a list of dependency licenses you do not want to use in your app. You should https://spdx.org/licenses/ ID's in list format to this file, then commit to the repo. For example:
-
-```json
-# restricted_licenses.json
-
-{
- ["LGPL-2.0-only", "LPL-1.0"]
-}
+      - name: Checkout dependency check repository
+        uses: chronograph-pe/checkout@v3
+        with:
+          repository: chronograph-pe/dependency-track-gh-action
+          ref: main
+          path: dependency-track-gh-action
+      
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'pip'
+            
+      - name: Run dependency check
+        env:
+          DEPENDENCY_CHECK_CONFIG: dependency-check-config.yml
+        run: | 
+          pip install -r dependency-track-gh-action/requirements.txt
+          python dependency-track-gh-action/app/main.py
+          # update `chronograph/chronograph` to the name of the repo you are scanning
+          cat /home/runner/work/chronograph/chronograph/job_summary.md >> $GITHUB_STEP_SUMMARY
+          rm -rf dependency-track-gh-action
+      - name: Commit license data to this branch
+        uses: chronograph-pe/git-auto-commit-action@v4
 ```
 
-The `dependency_exceptions.json` file contains a list of dependency names you want to skip checks for. Follow the same schema as the `restricted_licenses.json` except use dependency names. You can look in `license_file.json` to find valid names, or look in the github action console output. 
+## Results
+License violations will be returned to the github action console and create a job summary. The summary contains:
+-- License violations: The app name, language, depedency name, and licenses that were not included in the `allowed_licenses.json` file.
+-- Unknown depedency licenses: The app name, language, depedency name, and licenses where dependency check could not identify a valid spdx license. 
+-- Dependencies not included in check: A list of dependencies that were added to the `dependency_exceptions.json` file
+-- All checked dependencies: Every dependency that was scanned in the repo. 
+
+If the `block_build:` flag in `dependency-check-config.yml` is set to True, any license violations will return `exit(`)` and block the build from proceeding. Otherwise, this action will run and return informational results. 
