@@ -18,15 +18,15 @@ apps:
   - {app_name_03}:
       license_file: sample-node-app/licenses.json
       language: node
-      dependency_file: sample-node-app/package-lock-v2.json
+      dependency_file: sample-node-app/package-lock.json
 block_build: False
 allowed_licenses_file: ./allowed_licenses.json
 dependency_exceptions_file: ./dependency-exceptions.json
 ```
 2.  Create the following files:
--- `license-file_.json` in each app directory. The content of this file should be `{}` for initial setup.
--- `dependency-exceptions.json` in the repo root directory. The contents are a list of dependencies you do not want to be scanned for license violations. If there are no exceptions, the file must contain an empty list -> `[]`.
--- `allowed_licenses.json` in the repo root directory. The contents are a list of licenses you allow to be used in your apps. by default all other licenses will be restricted. 
+- `license-file_.json` in each app directory. The content of this file should be `{}` for initial setup.
+- `dependency-exceptions.json` in the repo root directory. The contents are a list of dependencies you do not want to be scanned for license violations. If there are no exceptions, the file must contain an empty list -> `{}`.
+- `allowed_licenses.json` in the repo root directory. The contents are a list of licenses you allow to be used in your apps. by default all other licenses will be restricted. 
 
 3. Create the following github action workflow file in `.github/workflows/dependency-check.yml`:
 ```yaml
@@ -70,12 +70,14 @@ jobs:
 ```
 
 ## Usage
-1. Populate `allowed-licenses.json` with a list of approved dependency licenses. If a depedency has two licenses, the scanner will check the allowed list for both licenses and match on one. 
-2. If you need to bypass scanning for a depedency populate `dependency-exceptions.json` with the following format:
+1. Open a PR with changes inside `allowed-licenses.json` with a list of approved dependency licenses. If a dependency has two licenses, the scanner will check the allowed list for both licenses and match on one. 
+2. If you need to bypass scanning for a dependency populate `dependency-exceptions.json` with the following format:
 ```json
 {
-  # depedency names can have wildcards
-  "{depedency_name}": "{reason you are creating this exception}"
+  # dependency names can have wildcards
+  # some dependencies start with @, if so you must not include
+  # this in the dependency name. 
+  "{dependency_name}": "reason you are creating this exception"
 }
 
 example:
@@ -90,9 +92,9 @@ example:
 
 ## Results
 License violations will be returned to the github action console and create a job summary. The summary contains:
--- License violations: The app name, language, depedency name, and licenses that were not included in the `allowed_licenses.json` file.
--- Unknown depedency licenses: The app name, language, depedency name, and licenses where dependency check could not identify a valid spdx license. 
--- Dependencies not included in check: A list of dependencies that were added to the `dependency_exceptions.json` file
--- All checked dependencies: Every dependency that was scanned in the repo. 
+- License violations: The app name, language, depedency name, and licenses that were not included in the `allowed_licenses.json` file.
+- Unknown depedency licenses: The app name, language, depedency name, and licenses where dependency check could not identify a valid spdx license. 
+- Dependencies not included in check: A list of dependencies that were added to the `dependency_exceptions.json` file
+- All checked dependencies: Every dependency that was scanned in the repo. 
 
 If the `block_build:` flag in `dependency-check-config.yml` is set to True, any license violations will return `exit(`)` and block the build from proceeding. Otherwise, this action will run and return informational results. 
