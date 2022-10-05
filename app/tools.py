@@ -108,6 +108,9 @@ def find_exception(dependency_exceptions, dependency_name):
     for exception_name, exception_reason in dependency_exceptions.items():
         exception_name = exception_name.replace("*", "." )
         rex = re.compile(exception_name)
+        if dependency_name.startswith("@"):
+            dependency_name = dependency_name[1:]
+
         dn = dependency_name.lower().split("@", 1)[0]
 
         if rex.findall(dn):
