@@ -98,3 +98,5 @@ License violations will be returned to the github action console and create a jo
 - All checked dependencies: Every dependency that was scanned in the repo. 
 
 If the `block_build:` flag in `dependency-check-config.yml` is set to True, any license violations will return `exit(`)` and block the build from proceeding. Otherwise, this action will run and return informational results. 
+
+There are occasions when a depedency will not contain it's license information in depedency repositories. In these cases you should look them up and manually add the depedency and license to `licenses.json`. Potential future feature will be looking these up via other sources. 
